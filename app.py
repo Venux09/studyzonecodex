@@ -8,7 +8,8 @@ from dotenv import load_dotenv
 
 
 app = Flask(__name__)
-app.config["UPLOADS_FOALDERS"] = 'uploads'
+app.config["UPLOAD_FOLDER"] = 'uploads'
+
 @app.route("/")
 def landing():
     return render_template('landing.html')#front or home page
@@ -49,7 +50,7 @@ def generate_quiz():
         questions = get_quiz(data['text'], data['type'])#post method is used for getting the generated quiz
         return jsonify({'questions': questions})
     
-
+@app.route('/chat/<filename>')
 def chat(filename):
     files = upload_files(app.config['UPLOAD_FOLDER'])
     return render_template('chat.html', filename=filename, files=files)
