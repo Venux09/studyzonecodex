@@ -1,0 +1,5 @@
+requirement :-
+1.flask for framwork and app
+2.pdfplumber for getting text from the files
+3.generative ai for ai chat
+4.python dotenv for for getting api key
