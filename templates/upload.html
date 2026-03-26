@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload — StudyZoneCodex{% endblock %}
+
+{% block content %}
+
+<div class="pg-label">Your Study Scrolls</div>
+<h1 class="pg-title">Upload a PDF</h1>
+<p class="pg-sub">Upload your study material and let AI do the heavy lifting</p>
+
+<!-- UPLOAD FORM -->
+<div class="card" style="margin-bottom: 20px;">
+  <form method="POST" enctype="multipart/form-data" id="uploadForm">
+    <div class="drop-zone" id="dropZone">
+      <div class="dz-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+      </div>
+      <div class="dz-title">Drop your PDF here</div>
+      <div class="dz-sub">or click to browse — max 20MB</div>
+      <input type="file" name="pdf" id="fileInput" accept=".pdf" style="display:none">
+      <button type="button" class="btn-primary" style="margin-top: 16px;" onclick="document.getElementById('fileInput').click()">
+        Choose File
+      </button>
+    </div>
+
+    <!-- shows selected filename -->
+    <div id="fileSelected" style="display:none; margin-top: 12px; color: var(--sage); font-size: 13px;"></div>
+
+    <button type="submit" class="btn-primary" style="margin-top: 16px; width: 100%;">
+      Upload & Analyse
+    </button>
+  </form>
+</div>
+
+<!-- SAVED FILES -->
+<div class="card">
+  <div class="pg-label">Saved Files</div>
+
+  {% if files %}
+    <div class="file-list">
+      {% for file in files %}
+      <div class="file-item">
+        <div class="fi-left">
+          <div class="fi-icon">📄</div>
+          <div>
+            <div class="fi-name">{{ file.name }}</div>
+            <div class="fi-meta">{{ file.size }}</div>
+          </div>
+        </div>
+        <div class="fi-actions">
+          <a href="/summary/{{ file.name }}" class="fi-btn fb-open">Summary</a>
+          <a href="/quiz/{{ file.name }}" class="fi-btn fb-open">Quiz</a>
+          <a href="/chat/{{ file.name }}" class="fi-btn fb-open">Chat</a>
+          <form method="POST" action="/delete/{{ file.name }}" style="display:inline">
+            <button type="submit" class="fi-btn fb-del">Delete</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p style="color: var(--muted); font-size: 13px;">No files uploaded yet.</p>
+  {% endif %}
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // show filename when user selects a file
+  document.getElementById('fileInput').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+      const div = document.getElementById('fileSelected');
+      div.textContent = '✓ ' + file.name + ' selected';
+      div.style.display = 'block';
+    }
+  });
+</script>
+{% endblock %}
