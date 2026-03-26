@@ -6,7 +6,7 @@ UPLOAD_FOLDERS = 'uploads'
 
 def save_files(file,folder):
     filename = secure_filename(file.filename)
-    path = os.path.join(filename,folder)
+    path = os.path.join(folder,filename)
     file.save(path)
     return filename
 
@@ -28,7 +28,7 @@ def upload_files(folder):
 
 
 def delete_files(filename,folder):
-    path = os.path.join(filename,folder)
+    path = os.path.join(folder,filename)
     if os.path.exists(path):
         os.remove(path)
     
