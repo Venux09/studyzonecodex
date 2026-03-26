@@ -1,7 +1,7 @@
 #skeleton of the app
-from flask import Flask ,render_template,url_for,request,jsonify,redirect
-from utils.pdf_parser import extract_text
-from utils.ai_helper import get_summary, get_quiz, get_chat_response
+from flask import Flask ,render_template,url_for,request,jsonify,redirect#jsonify  for calling json function dictionary for data ,request for obtaining things,redirect for redirection of route to main place
+from utils.pdf_parser import extract_text#for extrating the text from the pdf user has uploaded 
+from utils.ai_helper import get_summary, get_quiz, get_chat_response#data of summary,chat and quiz
 from utils.file_manager import save_files, upload_files, delete_files
 import os 
 from dotenv import load_dotenv
@@ -12,9 +12,9 @@ app.config["UPLOAD_FOLDER"] = 'uploads'
 
 @app.route("/")
 def landing():
-    return render_template('landing.html')#front or home page
+    return render_template('landing.html')#front or home page landing page 
 
-@app.route('/upload',methods = ['GET','POST'])#upload section
+@app.route('/upload',methods = ['GET','POST'])#upload section 
 def upload():#section for posting and saving that file
     if request.method == 'POST':
         file = request.files.get('pdf')
@@ -31,12 +31,12 @@ def upload():#section for posting and saving that file
 def summary(filename):
     path =  os.path.join(app.config['UPLOAD_FOLDER'], filename)#for getting teh generating summary from  the func
     text = extract_text(path)
-    summary_data = get_summary(text) 
+    summary_data = get_summary(text) #extracting summary from the path ..path is the pdf we are uploading 
     
 
     return render_template('summary.html', filename=filename, summary=summary_data)
 
-@app.route('/quiz/<filename>')#quiz section
+@app.route('/quiz/<filename>')#for generating the quiz
 def quiz(filename):
     path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     text = extract_text(path)
@@ -48,10 +48,10 @@ def quiz(filename):
 def generate_quiz():
         data = request.json#Requesting the data from the dictionary
         questions = get_quiz(data['text'], data['type'])#post method is used for getting the generated quiz
-        return jsonify({'questions': questions})
+        return jsonify({'questions': questions})#for genearting the quiz in the quiz section
     
 @app.route('/chat/<filename>')
-def chat(filename):
+def chat(filename):#options for chatting to the ai
     files = upload_files(app.config['UPLOAD_FOLDER'])
     return render_template('chat.html', filename=filename, files=files)
 
