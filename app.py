@@ -28,7 +28,7 @@ def upload():#section for posting and saving that file
 
 @app.route('/summary/<filename>')#summary section
 def summary(filename):
-    path =  os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    path =  os.path.join(app.config['UPLOAD_FOLDER'], filename)#for getting teh generating summary from  the func
     text = extract_text(path)
     summary_data = get_summary(text) 
     
@@ -40,13 +40,13 @@ def quiz(filename):
     path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     text = extract_text(path)
 
-    return render_template('quiz.html',filename = filename, text = text)
+    return render_template('quiz.html',filename = filename, text = text)#returning the same text for quiz
 
 
 @app.route('/generate_quiz',methods = ['POST'])
 def generate_quiz():
         data = request.json#Requesting the data from the dictionary
-        questions = get_quiz(data['text'], data['type'])
+        questions = get_quiz(data['text'], data['type'])#post method is used for getting the generated quiz
         return jsonify({'questions': questions})
     
 
@@ -56,16 +56,16 @@ def chat(filename):
 
 @app.route('/chat-message', methods=['POST'])#for reply from the ai 
 def chat_message():
-    data = request.json
+    data = request.json#requesting dictonary of reply we have getting from the ai
     path = os.path.join(app.config['UPLOAD_FOLDER'], data['filename'])
     text = extract_text(path)
-    reply = get_chat_response(text, data['message'], data.get('history', []))
+    reply = get_chat_response(text, data['message'], data.get('history', []))#func provide the text and give the reply from the ai
     return jsonify({'reply': reply})
 
 @app.route('/delete/<filename>', methods=['POST'])#for deleting the files in saved section
 def delete(filename):
     delete_files(filename, app.config['UPLOAD_FOLDER'])
-    return redirect(url_for('upload'))
+    return redirect(url_for('upload'))#redirect this route to upload  
 
 if __name__== '__main__':
     app.run(debug=True)#for debugging or file changing -crashout
