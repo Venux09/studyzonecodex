@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}StudyZoneCodex{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <div class="aurora"><div class="a1"></div><div class="a2"></div></div>
+  <div class="petals-layer" id="petals"></div>
+  <div class="moon"></div>
+
+  <nav class="navbar">
+    <a href="/" class="nav-logo">
+      <div class="logo-text">StudyZoneCodex</div>
+      <div class="logo-sub">AI · Study · Platform</div>
+    </a>
+    <div class="nav-links">
+      <a href="/upload" class="nav-link">Upload</a>
+      <a href="#" class="nav-link">Summary</a>
+      <a href="#" class="nav-link">Quiz</a>
+      <a href="#" class="nav-link">Chat</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <script src="{{ url_for('static', filename='js/petals.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+
+</body>
+</html>

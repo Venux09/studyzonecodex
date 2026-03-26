@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}StudyZoneCodex — AI Powered Study Platform{% endblock %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">AI · Powered · Study · Platform</div>
+    <h1 class="hero-title">
+      <span class="t1">Study Smarter</span>
+      <span class="t2">Not Harder</span>
+    </h1>
+    <p class="hero-sub">
+      Upload any PDF and instantly get summaries, quizzes,
+      flashcards and an AI that answers all your questions.
+    </p>
+    <a href="/upload" class="btn-primary">Get Started</a>
+  </div>
+</section>
+
+<!-- FEATURES SECTION -->
+<section class="features">
+  <div class="feat-eyebrow">What It Does</div>
+  <div class="feat-grid">
+
+    <div class="feat-card">
+      <div class="feat-tag" style="color: var(--sakura)">01</div>
+      <div class="feat-name">Summary</div>
+      <div class="feat-desc">AI reads your PDF and gives you clean key points instantly</div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-tag" style="color: var(--lav)">02</div>
+      <div class="feat-name">Quiz</div>
+      <div class="feat-desc">Auto generate MCQ, true/false and short answer questions</div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-tag" style="color: var(--peach)">03</div>
+      <div class="feat-name">Flashcards</div>
+      <div class="feat-desc">Key terms and definitions in flip card format</div>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-tag" style="color: var(--sky)">04</div>
+      <div class="feat-name">AI Chat</div>
+      <div class="feat-desc">Ask your AI sensei anything about the uploaded document</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HOW IT WORKS SECTION -->
+<section class="how-it-works">
+  <div class="feat-eyebrow">How It Works</div>
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">Upload your PDF</div>
+    </div>
+
+    <div class="step-arrow">→</div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">AI reads it</div>
+    </div>
+
+    <div class="step-arrow">→</div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">Get summary, quiz and chat</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="cta-section">
+  <h2 class="cta-title">Ready to study smarter?</h2>
+  <p class="cta-sub">Upload your first PDF and see the magic</p>
+  <a href="/upload" class="btn-primary">Start Now</a>
+</section>
+
+{% endblock %}
