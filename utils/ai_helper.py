@@ -17,7 +17,7 @@ def get_quiz(text,quiz_type = "mcq"):#will generate the quiz of the given notes
     response = model.generate_content(f"generate {quiz_type} from this text :{text}")
     return response.text
 
-def get_chat_response(text,user_message,history):#will response according too the chat and will generate solutions too
+def get_chat_response(text,user_message, history):#will response according too the chat and will generate solutions too
     chat = model.start_chat(history=[])
 
     full_message = f"""You are studyzonecodex.an AI study tool.
