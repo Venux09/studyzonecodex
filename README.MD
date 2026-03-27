@@ -62,3 +62,5 @@ studyzonecodex/
 ## Author
 
 Made by Monu — github.com/venux09
+website is live :-https://studyzonecodex-3.onrender.com/
+using render and meeting requirement it is live succesfully
