@@ -1,0 +1,6 @@
+
+
+1.pdfplumber 
+2.groq
+3.python dotenv 
+4.gunicorn
