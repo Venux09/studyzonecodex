@@ -1,5 +1,5 @@
-1.pdfplumber 
-2.groq
-3.python dotenv 
-4.gunicorn
-5.flask
+pdfplumber 
+groq
+python dotenv 
+gunicorn
+flask
