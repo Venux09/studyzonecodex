@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}Chat — StudyZoneCodex{% endblock %}
+
+{% block content %}
+
+<div class="pg-label">Ask Anything</div>
+<h1 class="pg-title">Sensei Chat</h1>
+<p class="pg-sub">Chat with AI about your document</p>
+
+<!-- NAVIGATION PILLS -->
+<div class="page-nav">
+  <a href="/upload" class="page-pill">Upload</a>
+  <a href="/summary/{{ filename }}" class="page-pill">Summary</a>
+  <a href="/quiz/{{ filename }}" class="page-pill">Quiz</a>
+  <a href="/chat/{{ filename }}" class="page-pill active">Chat</a>
+</div>
+
+<!-- CHAT LAYOUT -->
+<div class="chat-layout">
+
+  <!-- SIDEBAR -->
+  <div class="chat-sidebar">
+    <div class="pg-label">Your Files</div>
+    {% for file in files %}
+    <a href="/chat/{{ file.name }}" class="cs-doc {% if file.name == filename %}active{% endif %}">
+      <div class="cs-doc-name">{{ file.name }}</div>
+      <div class="cs-doc-meta">{{ file.size }}</div>
+    </a>
+    {% endfor %}
+  </div>
+
+  <!-- CHAT MAIN -->
+  <div class="chat-main">
+    <div class="chat-doc-hdr">
+      <div class="online-dot"></div>
+      <div class="chat-doc-name">Chatting about: <span>{{ filename }}</span></div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="msgs" id="messages">
+      <div class="msg">
+        <div class="av av-ai">AI</div>
+        <div class="bub bub-ai">
+          Document loaded — <strong style="color:var(--sakura)">{{ filename }}</strong>. Ask me anything about it!
+        </div>
+      </div>
+    </div>
+
+    <!-- INPUT -->
+    <div class="cin-row">
+      <input 
+        class="cin" 
+        id="userInput" 
+        placeholder="Ask anything about your document..."
+        onkeypress="if(event.key==='Enter') sendMessage()"
+      >
+      <button class="csend" onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const filename = {{ filename | tojson }};
+  let history = [];
+
+  function sendMessage() {
+    const input = document.getElementById('userInput');
+    const message = input.value.trim();
+    if (!message) return;
+
+    // show user message
+    addMessage(message, 'user');
+    input.value = '';
+
+    // show typing indicator
+    addTyping();
+
+    // call backend
+    fetch('/chat-message', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        filename: filename,
+        message: message,
+        history: history
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      removeTyping();
+      addMessage(data.reply, 'ai');
+      // save to history for context
+      history.push({ user: message, assistant: data.reply });
+    })
+    .catch(err => {
+      removeTyping();
+      addMessage('Error getting response. Try again.', 'ai');
+    });
+  }
+
+  function addMessage(text, role) {
+    const msgs = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = `msg ${role === 'user' ? 'u' : ''}`;
+    div.innerHTML = `
+      <div class="av ${role === 'user' ? 'av-u' : 'av-ai'}">${role === 'user' ? 'You' : 'AI'}</div>
+      <div class="bub ${role === 'user' ? 'bub-u' : 'bub-ai'}">${text}</div>
+    `;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function addTyping() {
+    const msgs = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = 'msg';
+    div.id = 'typing';
+    div.innerHTML = `
+      <div class="av av-ai">AI</div>
+      <div class="bub bub-ai" style="color:var(--muted)">Thinking...</div>
+    `;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('typing');
+    if (t) t.remove();
+  }
+</script>
+{% endblock %}

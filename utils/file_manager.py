@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 UPLOAD_FOLDERS = 'uploads'
 
 
-def save_files(folder,file):#save the files and give the secure names like removing the gap with_
+def save_files(file,folder):#save the files and give the secure names like removing the gap with_
     filename = secure_filename(file.filename)
     path = os.path.join(folder,filename)
     file.save(path)

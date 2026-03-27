@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Quiz — StudyZoneCodex{% endblock %}
+
+{% block content %}
+
+<div class="pg-label">Test Yourself</div>
+<h1 class="pg-title">Quiz</h1>
+<p class="pg-sub">Auto generated questions from <strong style="color: var(--sakura)">{{ filename }}</strong></p>
+
+<!-- NAVIGATION PILLS -->
+<div class="page-nav">
+  <a href="/upload" class="page-pill">Upload</a>
+  <a href="/summary/{{ filename }}" class="page-pill">Summary</a>
+  <a href="/quiz/{{ filename }}" class="page-pill active">Quiz</a>
+  <a href="/chat/{{ filename }}" class="page-pill">Chat</a>
+</div>
+
+<!-- QUIZ TYPE BUTTONS -->
+<div class="quiz-btns">
+  <button class="quiz-type-btn active" onclick="generateQuiz('mcq', this)">MCQ</button>
+  <button class="quiz-type-btn" onclick="generateQuiz('tf', this)">True / False</button>
+  <button class="quiz-type-btn" onclick="generateQuiz('short', this)">Short Answer</button>
+</div>
+
+<!-- LOADING STATE -->
+<div id="loading" style="display:none; text-align:center; padding: 40px 0;">
+  <p style="color: var(--muted); font-size: 13px;">Generating questions...</p>
+</div>
+
+<!-- QUESTIONS CONTAINER -->
+<div id="questionsContainer"></div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const docText = {{ text | tojson }};
+  let currentType = 'mcq';
+
+  function generateQuiz(type, btn) {
+    // update active button
+    document.querySelectorAll('.quiz-type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentType = type;
+
+    // show loading
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('questionsContainer').innerHTML = '';
+
+    // call backend
+    fetch('/generate_quiz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: docText, type: type })
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('loading').style.display = 'none';
+      renderQuestions(data.questions, type);
+    })
+    .catch(err => {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('questionsContainer').innerHTML = 
+        '<p style="color:var(--sakura);font-size:13px;">Error generating questions. Try again.</p>';
+    });
+  }
+
+  function renderQuestions(questions, type) {
+    const container = document.getElementById('questionsContainer');
+    
+    // questions comes as text from AI so just display it cleanly
+    container.innerHTML = `
+      <div class="card">
+        <div class="pg-label">Generated Questions</div>
+        <div class="quiz-output">${questions.replace(/\n/g, '<br>')}</div>
+      </div>
+    `;
+  }
+
+  // auto generate MCQ on page load
+  window.onload = () => {
+    document.querySelector('.quiz-type-btn').click();
+  };
+</script>
+{% endblock %}
